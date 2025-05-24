@@ -1,0 +1,51 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: laravue-dashboard
+        restart: unless-stopped
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www:cached
+        ports:
+            - "8000:8000"
+            - "5173:5173"
+        depends_on:
+            - db
+        networks:
+            - laravel
+        command: php artisan serve --host=0.0.0.0 --port=8000
+
+    pgadmin:
+        image: dpage/pgadmin4
+        container_name: laravue-pgadmin
+        restart: unless-stopped
+        environment:
+            PGADMIN_DEFAULT_EMAIL: admin@admin.com
+            PGADMIN_DEFAULT_PASSWORD: admin123
+        ports:
+            - "8080:80"  # ✅ correct port for pgAdmin web UI
+        networks:
+            - laravel
+
+    db:
+        image: postgres:14
+        container_name: laravue-db
+        restart: always
+        environment:
+            POSTGRES_DB: laravue_dashboard
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: mypass
+        ports:
+            - "5432:5432"
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+        networks:
+            - laravel
+
+volumes:
+    pgdata:
+
+networks:
+    laravel:
