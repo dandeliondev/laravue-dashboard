@@ -45,8 +45,12 @@ VITE_APP_URL=http://192.168.x.x:5173
 5. Start Laravel dev server (if not automated)
 ```
 docker exec -it laravue-dashboard bash
-php artisan serve --host=0.0.0.0 --port=8000
+php artisan serve --host=0.0.0.0 --port=8000 
+or 
+php artisan serve
 ```
+Open http://localhost:8000 in browser
+
 6.  **Ensure correct Vite config** (`vite.config.js`)
 
 ```js
