@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,4 +19,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('auth:sanctum')->apiResource('users', API\UserController::class);
+// Named with an `api.` prefix so these don't collide with the web `users.*` routes.
+Route::middleware('auth:sanctum')->apiResource('users', UserController::class)->names('api.users');

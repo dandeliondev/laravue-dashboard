@@ -1,20 +1,10 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
-    email: {
-        type: String,
-        required: true,
-    },
-    token: {
-        type: String,
-        required: true,
-    },
+    email: { type: String, required: true },
+    token: { type: String, required: true },
 });
 
 const form = useForm({
@@ -32,60 +22,60 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Reset Password" />
+    <Head title="Reset Password" />
 
+    <GuestLayout title="Set a new password">
         <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
+            <div class="form-group mb-20">
+                <label for="email">Email Address</label>
+                <input
                     id="email"
-                    type="email"
-                    class="mt-1 block w-full"
                     v-model="form.email"
+                    type="email"
+                    class="form-control"
+                    :class="{ 'is-invalid': form.errors.email }"
                     required
                     autofocus
                     autocomplete="username"
                 />
-
-                <InputError class="mt-2" :message="form.errors.email" />
+                <div v-if="form.errors.email" class="invalid-feedback d-block">{{ form.errors.email }}</div>
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
+            <div class="form-group mb-20">
+                <label for="password">New Password</label>
+                <input
                     id="password"
-                    type="password"
-                    class="mt-1 block w-full"
                     v-model="form.password"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password_confirmation" value="Confirm Password" />
-
-                <TextInput
-                    id="password_confirmation"
                     type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password_confirmation"
+                    class="form-control"
+                    :class="{ 'is-invalid': form.errors.password }"
                     required
                     autocomplete="new-password"
                 />
-
-                <InputError class="mt-2" :message="form.errors.password_confirmation" />
+                <div v-if="form.errors.password" class="invalid-feedback d-block">{{ form.errors.password }}</div>
             </div>
 
-            <div class="flex items-center justify-end mt-4">
-                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+            <div class="form-group mb-20">
+                <label for="password_confirmation">Confirm Password</label>
+                <input
+                    id="password_confirmation"
+                    v-model="form.password_confirmation"
+                    type="password"
+                    class="form-control"
+                    required
+                    autocomplete="new-password"
+                />
+            </div>
+
+            <div class="admin__button-group button-group d-flex pt-1 justify-content-center">
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-default w-100 btn-squared text-capitalize lh-normal"
+                    :disabled="form.processing"
+                >
+                    <span v-if="form.processing" class="spinner-border spinner-border-sm me-1"></span>
                     Reset Password
-                </PrimaryButton>
+                </button>
             </div>
         </form>
     </GuestLayout>

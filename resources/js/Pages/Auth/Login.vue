@@ -1,19 +1,10 @@
 <script setup>
-import Checkbox from '@/Components/Checkbox.vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 defineProps({
-    canResetPassword: {
-        type: Boolean,
-    },
-    status: {
-        type: String,
-    },
+    canResetPassword: { type: Boolean },
+    status: { type: String },
 });
 
 const form = useForm({
@@ -30,65 +21,70 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Log in" />
+    <Head title="Log in" />
 
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
-        </div>
+    <GuestLayout title="Sign in to Laravue">
+        <div v-if="status" class="alert alert-success mb-20">{{ status }}</div>
 
         <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
+            <div class="form-group mb-20">
+                <label for="email">Email Address</label>
+                <input
                     id="email"
-                    type="email"
-                    class="mt-1 block w-full"
                     v-model="form.email"
+                    type="email"
+                    class="form-control"
+                    :class="{ 'is-invalid': form.errors.email }"
+                    placeholder="name@example.com"
                     required
                     autofocus
                     autocomplete="username"
                 />
-
-                <InputError class="mt-2" :message="form.errors.email" />
+                <div v-if="form.errors.email" class="invalid-feedback d-block">{{ form.errors.email }}</div>
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
+            <div class="form-group mb-15">
+                <label for="password">Password</label>
+                <input
                     id="password"
-                    type="password"
-                    class="mt-1 block w-full"
                     v-model="form.password"
+                    type="password"
+                    class="form-control"
+                    :class="{ 'is-invalid': form.errors.password }"
+                    placeholder="Password"
                     required
                     autocomplete="current-password"
                 />
-
-                <InputError class="mt-2" :message="form.errors.password" />
+                <div v-if="form.errors.password" class="invalid-feedback d-block">{{ form.errors.password }}</div>
             </div>
 
-            <div class="block mt-4">
-                <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">Remember me</span>
-                </label>
+            <div class="admin-condition d-flex justify-content-between align-items-center mb-20">
+                <div class="form-check mb-0">
+                    <input id="remember" v-model="form.remember" type="checkbox" class="form-check-input" />
+                    <label class="form-check-label" for="remember">Keep me logged in</label>
+                </div>
+                <Link v-if="canResetPassword" :href="route('password.request')" class="color-primary">Forgot password?</Link>
             </div>
 
-            <div class="flex items-center justify-end mt-4">
-                <Link
-                    v-if="canResetPassword"
-                    :href="route('password.request')"
-                    class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+            <div class="admin__button-group button-group d-flex pt-1 justify-content-center">
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-default w-100 btn-squared text-capitalize lh-normal"
+                    :disabled="form.processing"
                 >
-                    Forgot your password?
-                </Link>
-
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
-                </PrimaryButton>
+                    <span v-if="form.processing" class="spinner-border spinner-border-sm me-1"></span>
+                    Sign in
+                </button>
             </div>
         </form>
+
+        <template #footer>
+            <div class="admin-topbar">
+                <p class="mb-0">
+                    Don't have an account?
+                    <Link :href="route('register')" class="color-primary">Sign up</Link>
+                </p>
+            </div>
+        </template>
     </GuestLayout>
 </template>

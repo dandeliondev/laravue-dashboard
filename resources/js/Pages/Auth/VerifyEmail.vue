@@ -1,51 +1,47 @@
 <script setup>
 import { computed } from 'vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
-    status: {
-        type: String,
-    },
+    status: { type: String },
 });
 
 const form = useForm({});
 
-const submit = () => {
-    form.post(route('verification.send'));
-};
+const submit = () => form.post(route('verification.send'));
 
 const verificationLinkSent = computed(() => props.status === 'verification-link-sent');
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Email Verification" />
+    <Head title="Email Verification" />
 
-        <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-            Thanks for signing up! Before getting started, could you verify your email address by clicking on the link
-            we just emailed to you? If you didn't receive the email, we will gladly send you another.
-        </div>
+    <GuestLayout title="Verify your email">
+        <p class="mb-20 text-muted fs-14">
+            Thanks for signing up! Please verify your email by clicking the link we just emailed you. Didn't get it?
+            We'll gladly send another.
+        </p>
 
-        <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400" v-if="verificationLinkSent">
-            A new verification link has been sent to the email address you provided during registration.
+        <div v-if="verificationLinkSent" class="alert alert-success mb-20">
+            A new verification link has been sent to your email address.
         </div>
 
         <form @submit.prevent="submit">
-            <div class="mt-4 flex items-center justify-between">
-                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Resend Verification Email
-                </PrimaryButton>
-
-                <Link
-                    :href="route('logout')"
-                    method="post"
-                    as="button"
-                    class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                    >Log Out</Link
-                >
+            <div class="admin__button-group button-group d-flex pt-1 justify-content-center">
+                <button type="submit" class="btn btn-primary btn-default w-100 btn-squared text-capitalize lh-normal" :disabled="form.processing">
+                    <span v-if="form.processing" class="spinner-border spinner-border-sm me-1"></span>
+                    Resend verification email
+                </button>
             </div>
         </form>
+
+        <template #footer>
+            <div class="admin-topbar">
+                <p class="mb-0">
+                    <Link :href="route('logout')" method="post" as="button" class="color-primary border-0 bg-transparent">Log out</Link>
+                </p>
+            </div>
+        </template>
     </GuestLayout>
 </template>
