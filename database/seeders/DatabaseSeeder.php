@@ -18,5 +18,11 @@ class DatabaseSeeder extends Seeder
         ]);
 
         \App\Models\User::factory(10)->create();
+
+        // Roles must run before users get assigned roles; settings are independent.
+        $this->call([
+            RoleSeeder::class,
+            SettingSeeder::class,
+        ]);
     }
 }

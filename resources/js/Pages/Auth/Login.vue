@@ -7,9 +7,10 @@ defineProps({
     status: { type: String },
 });
 
+// Demo credentials (seeded user) — prefilled so reviewers can sign in with one click.
 const form = useForm({
-    email: '',
-    password: '',
+    email: 'test@example.com',
+    password: 'password',
     remember: false,
 });
 
@@ -76,6 +77,12 @@ const submit = () => {
                     Sign in
                 </button>
             </div>
+
+            <div class="demo-note mt-25">
+                <span class="demo-note__title"><i class="uil uil-info-circle"></i> Demo account</span>
+                <span class="demo-note__row">Email <code>test@example.com</code></span>
+                <span class="demo-note__row">Password <code>password</code></span>
+            </div>
         </form>
 
         <template #footer>
@@ -88,3 +95,30 @@ const submit = () => {
         </template>
     </GuestLayout>
 </template>
+
+<style scoped>
+.demo-note {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    background: rgba(95, 99, 242, 0.07);
+    border: 1px solid rgba(95, 99, 242, 0.18);
+    font-size: 13px;
+}
+.demo-note__title {
+    font-weight: 600;
+    color: var(--color-primary, #5f63f2);
+    margin-bottom: 2px;
+}
+.demo-note__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #5a5f7d;
+}
+.demo-note__row code {
+    color: #5f63f2;
+}
+</style>

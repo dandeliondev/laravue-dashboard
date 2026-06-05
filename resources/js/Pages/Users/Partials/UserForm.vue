@@ -5,6 +5,7 @@ defineProps({
     form: { type: Object, required: true },
     isEdit: { type: Boolean, default: false },
     submitLabel: { type: String, default: 'Save' },
+    roles: { type: Array, default: () => [] },
 });
 
 const emit = defineEmits(['submit']);
@@ -65,6 +66,14 @@ const emit = defineEmits(['submit']);
                     class="form-control"
                     autocomplete="new-password"
                 />
+            </div>
+
+            <div v-if="roles.length" class="col-md-6 mb-25">
+                <label class="form-label" for="role_id">Role</label>
+                <select id="role_id" v-model="form.role_id" class="form-control form-select">
+                    <option :value="null">— No role —</option>
+                    <option v-for="r in roles" :key="r.value" :value="r.value">{{ r.label }}</option>
+                </select>
             </div>
 
             <div class="col-md-12 mb-25">

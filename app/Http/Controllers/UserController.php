@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ class UserController extends Controller
         $search = $request->string('search')->trim()->toString();
 
         $users = User::query()
+            ->with('role:id,name,color')
             ->when($search, fn ($query) => $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%");
@@ -29,6 +31,7 @@ class UserController extends Controller
                 'name' => $user->name,
                 'email' => $user->email,
                 'verified' => $user->email_verified_at !== null,
+                'role' => $user->role ? ['name' => $user->role->name, 'color' => $user->role->color] : null,
                 'created_at' => $user->created_at,
             ]);
 
@@ -38,9 +41,34 @@ class UserController extends Controller
         ]);
     }
 
+    public function show(User $user): Response
+    {
+        $user->load('role');
+
+        return Inertia::render('Users/Show', [
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'verified' => $user->email_verified_at !== null,
+                'verified_at' => $user->email_verified_at,
+                'created_at' => $user->created_at,
+                'updated_at' => $user->updated_at,
+                'role' => $user->role ? [
+                    'name' => $user->role->name,
+                    'color' => $user->role->color,
+                    'description' => $user->role->description,
+                    'permissions' => $user->role->permissions ?? [],
+                ] : null,
+            ],
+        ]);
+    }
+
     public function create(): Response
     {
-        return Inertia::render('Users/Create');
+        return Inertia::render('Users/Create', [
+            'roles' => $this->roleOptions(),
+        ]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -49,12 +77,14 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'confirmed', Password::defaults()],
+            'role_id' => ['nullable', 'exists:roles,id'],
         ]);
 
         User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => $validated['password'],
+            'role_id' => $validated['role_id'] ?? null,
             'email_verified_at' => $request->boolean('verified') ? now() : null,
         ]);
 
@@ -69,7 +99,9 @@ class UserController extends Controller
                 'name' => $user->name,
                 'email' => $user->email,
                 'verified' => $user->email_verified_at !== null,
+                'role_id' => $user->role_id,
             ],
+            'roles' => $this->roleOptions(),
         ]);
     }
 
@@ -79,11 +111,13 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'password' => ['nullable', 'confirmed', Password::defaults()],
+            'role_id' => ['nullable', 'exists:roles,id'],
         ]);
 
         $user->fill([
             'name' => $validated['name'],
             'email' => $validated['email'],
+            'role_id' => $validated['role_id'] ?? null,
         ]);
 
         if (! empty($validated['password'])) {
@@ -113,4 +147,14 @@ class UserController extends Controller
 
         return redirect()->route('users.index')->with('success', 'User deleted successfully.');
     }
+
+    /**
+     * @return \Illuminate\Support\Collection<int, array<string, mixed>>
+     */
+    private function roleOptions()
+    {
+        return Role::orderBy('name')->get(['id', 'name'])
+            ->map(fn (Role $role) => ['value' => $role->id, 'label' => $role->name]);
+    }
 }
+

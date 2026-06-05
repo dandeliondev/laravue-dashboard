@@ -6,6 +6,7 @@ import UserForm from '@/Pages/Users/Partials/UserForm.vue';
 
 const props = defineProps({
     user: { type: Object, required: true },
+    roles: { type: Array, default: () => [] },
 });
 
 const form = useForm({
@@ -13,6 +14,7 @@ const form = useForm({
     email: props.user.email,
     password: '',
     password_confirmation: '',
+    role_id: props.user.role_id ?? null,
     verified: props.user.verified,
 });
 
@@ -40,7 +42,7 @@ const submit = () => form.put(route('users.update', props.user.id));
                             <h6 class="mb-0">Edit User Details</h6>
                         </div>
                         <div class="card-body">
-                            <UserForm :form="form" is-edit submit-label="Save Changes" @submit="submit" />
+                            <UserForm :form="form" :roles="roles" is-edit submit-label="Save Changes" @submit="submit" />
                         </div>
                     </div>
                 </div>

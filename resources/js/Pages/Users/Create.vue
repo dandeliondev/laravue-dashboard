@@ -4,11 +4,16 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import PageHeader from '@/Components/Hexadash/PageHeader.vue';
 import UserForm from '@/Pages/Users/Partials/UserForm.vue';
 
+defineProps({
+    roles: { type: Array, default: () => [] },
+});
+
 const form = useForm({
     name: '',
     email: '',
     password: '',
     password_confirmation: '',
+    role_id: null,
     verified: false,
 });
 
@@ -36,7 +41,7 @@ const submit = () => form.post(route('users.store'));
                             <h6 class="mb-0">New User Details</h6>
                         </div>
                         <div class="card-body">
-                            <UserForm :form="form" submit-label="Create User" @submit="submit" />
+                            <UserForm :form="form" :roles="roles" submit-label="Create User" @submit="submit" />
                         </div>
                     </div>
                 </div>

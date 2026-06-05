@@ -74,6 +74,7 @@ const formatDate = (iso) =>
                                         <tr>
                                             <th class="ps-25">User</th>
                                             <th>Email</th>
+                                            <th>Role</th>
                                             <th>Status</th>
                                             <th>Joined</th>
                                             <th class="text-end pe-25">Actions</th>
@@ -84,16 +85,23 @@ const formatDate = (iso) =>
                                             <td class="ps-25">
                                                 <div class="d-flex align-items-center">
                                                     <span class="hexadash-avatar me-2">{{ initials(u.name) }}</span>
-                                                    <span class="fw-500">{{ u.name }}</span>
+                                                    <Link :href="route('users.show', u.id)" class="fw-500 hx-user-link">{{ u.name }}</Link>
                                                 </div>
                                             </td>
                                             <td>{{ u.email }}</td>
+                                            <td>
+                                                <span v-if="u.role" class="badge" :class="`badge-${u.role.color}`">{{ u.role.name }}</span>
+                                                <span v-else class="text-muted">—</span>
+                                            </td>
                                             <td>
                                                 <span v-if="u.verified" class="badge badge-success">Verified</span>
                                                 <span v-else class="badge badge-warning">Unverified</span>
                                             </td>
                                             <td>{{ formatDate(u.created_at) }}</td>
                                             <td class="text-end pe-25">
+                                                <Link :href="route('users.show', u.id)" class="btn btn-sm btn-outline-light me-1" title="View">
+                                                    <i class="uil uil-eye"></i>
+                                                </Link>
                                                 <Link :href="route('users.edit', u.id)" class="btn btn-sm btn-outline-light me-1" title="Edit">
                                                     <i class="uil uil-edit"></i>
                                                 </Link>
@@ -103,7 +111,7 @@ const formatDate = (iso) =>
                                             </td>
                                         </tr>
                                         <tr v-if="!users.data.length">
-                                            <td colspan="5" class="text-center py-4 text-muted">No users found.</td>
+                                            <td colspan="6" class="text-center py-4 text-muted">No users found.</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -143,5 +151,11 @@ const formatDate = (iso) =>
 .hx-search-box .form-control {
     padding-left: 38px;
     min-width: 260px;
+}
+.hx-user-link {
+    color: inherit;
+}
+.hx-user-link:hover {
+    color: var(--color-primary, #5f63f2);
 }
 </style>
