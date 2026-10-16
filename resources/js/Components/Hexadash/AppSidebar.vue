@@ -32,10 +32,22 @@ const menu = [
     { label: 'Activity Log', icon: 'uil-history', to: 'activity.index', pattern: 'activity.*' },
 
     { type: 'title', label: 'Apps' },
+    { label: 'Chat', icon: 'uil-comments-alt', to: 'chat.index', pattern: 'chat.*' },
+    { label: 'Inbox', icon: 'uil-envelope', to: 'inbox.index', pattern: 'inbox.*' },
     { label: 'Calendar', icon: 'uil-calendar-alt', to: 'calendar.index', pattern: 'calendar.*' },
     { label: 'Task Board', icon: 'uil-clipboard-notes', to: 'kanban.index', pattern: 'kanban.*' },
-    { label: 'Inbox', icon: 'uil-envelope', to: 'inbox.index', pattern: 'inbox.*' },
+    { label: 'To-Do', icon: 'uil-check-square', to: 'todos.index', pattern: 'todos.*' },
+    { label: 'Contacts', icon: 'uil-user-square', to: 'contacts.index', pattern: 'contacts.*' },
+    { label: 'Projects', icon: 'uil-folder-network', to: 'projects.index', pattern: 'projects.*' },
+    { label: 'File Manager', icon: 'uil-folder', to: 'files.index', pattern: 'files.*' },
+    { label: 'Gallery', icon: 'uil-image', to: 'gallery.index', pattern: 'gallery.*' },
     { label: 'Notifications', icon: 'uil-bell', to: 'notifications.index', pattern: 'notifications.*' },
+
+    { type: 'title', label: 'Pages' },
+    { label: 'Support Tickets', icon: 'uil-headphones-alt', to: 'tickets.index', pattern: 'tickets.*' },
+    { label: 'Invoice', icon: 'uil-receipt', to: 'invoice.index', pattern: 'invoice.*' },
+    { label: 'Pricing', icon: 'uil-tag-alt', to: 'pricing.index', pattern: 'pricing.*' },
+    { label: 'Timeline', icon: 'uil-history-alt', to: 'timeline.index', pattern: 'timeline.*' },
 
     { type: 'title', label: 'Account' },
     { label: 'Profile Settings', icon: 'uil-user', to: 'profile.edit', pattern: 'profile.edit' },

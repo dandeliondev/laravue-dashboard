@@ -48,6 +48,18 @@ Route::middleware('auth')->group(function () {
     Route::inertia('/inbox', 'Inbox/Index')->name('inbox.index');
     Route::inertia('/faq', 'Faq/Index')->name('faq.index');
 
+    // Collaboration & content pages (themed UI with demo data)
+    Route::inertia('/chat', 'Chat/Index')->name('chat.index');
+    Route::inertia('/contacts', 'Contacts/Index')->name('contacts.index');
+    Route::inertia('/projects', 'Projects/Index')->name('projects.index');
+    Route::inertia('/files', 'Files/Index')->name('files.index');
+    Route::inertia('/todos', 'Todos/Index')->name('todos.index');
+    Route::inertia('/gallery', 'Gallery/Index')->name('gallery.index');
+    Route::inertia('/timeline', 'Timeline/Index')->name('timeline.index');
+    Route::inertia('/tickets', 'Tickets/Index')->name('tickets.index');
+    Route::inertia('/invoice', 'Invoice/Index')->name('invoice.index');
+    Route::inertia('/pricing', 'Pricing/Index')->name('pricing.index');
+
     // Profile (current user)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
